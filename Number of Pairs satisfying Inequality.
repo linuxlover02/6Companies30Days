@@ -1,0 +1,38 @@
+class Solution {
+    long count;
+    public void merge(int low, int mid, int high, int nums[], int diff){
+        int left=low; int right=mid+1;
+        while(left<=mid && right<=high){
+            if(nums[left]<=(nums[right]+diff)){
+                count+=(high-right+1);
+                left++;
+            }else{
+                right++;
+            }
+        }
+
+        Arrays.sort(nums,low,high+1);
+        return;
+    }
+
+     public void partition(int low, int high, int nums[], int diff){
+        if(low==high) return;
+        int mid = (low+high)/2;
+        partition(low,mid,nums,diff);
+        partition(mid+1,high,nums,diff);
+        merge(low,mid,high,nums,diff);
+    }
+
+    public long numberOfPairs(int[] nums1, int[] nums2, int diff) {
+        int n=nums1.length;
+        count = 0;
+        int nums[] =  new int[n];
+        for(int i=0; i<n; i++){
+            nums[i]=(nums1[i]-nums2[i]);
+        }
+        partition(0,n-1,nums,diff);
+        return count;
+    }
+
+    
+}
