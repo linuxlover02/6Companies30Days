@@ -1,0 +1,68 @@
+class Solution {
+
+    HashMap<Integer,ArrayList<Integer>> map = new HashMap<>();
+
+    // constructing a tree:
+    public void constructTree(int [][]edges){
+        int n=edges.length;
+        for(int i=0; i<n; i++){
+            int n1 = edges[i][0];
+            int n2 = edges[i][1];
+            if(!map.containsKey(n1)){
+                map.put(n1,new ArrayList<Integer>());
+            }if(!map.containsKey(n2)){
+                map.put(n2,new ArrayList<Integer>());
+            }
+            map.get(n1).add(n2);
+            map.get(n2).add(n1);
+        }
+    }
+    
+    public void parentDist(int curNode, int curParent, int curDist, int parent[], int dist[]){
+        parent[curNode]=curParent;
+        dist[curNode]=curDist;
+        for(int curAdj: map.get(curNode)){
+            if(curAdj!=curParent){
+                parentDist(curAdj,curNode,curDist+1,parent,dist);
+            }
+        }
+    }
+
+    public int result(boolean []visited, int[] amount, int aliceAmnt, int curPos){
+        visited[curPos]=true;
+        boolean isLeaf = true;
+        int ans = Integer.MIN_VALUE;
+        for(int adj: map.get(curPos)){
+            if(!visited[adj]){
+                isLeaf = false;
+                int curAns = result(visited,amount,aliceAmnt+amount[adj],adj);
+                ans=Math.max(ans,curAns);
+            }
+        }
+        visited[curPos]=false;
+        if(isLeaf) return aliceAmnt;
+        return ans;
+    }
+    public int mostProfitablePath(int[][] edges, int bob, int[] amount) {
+        int n=amount.length;
+        int parent[] = new int[n];
+        int dist[] = new int[n];
+        boolean visited[] = new boolean[n];
+        constructTree(edges);
+        parentDist(0,0,0,parent,dist);
+
+        int bobPos=bob;
+        int curDist=0;
+        while(bobPos!=0){
+            if(dist[bobPos]>curDist){
+                amount[bobPos]=0;
+            }else if(dist[bobPos]==curDist){
+                amount[bobPos]/=2;
+            }
+            bobPos=parent[bobPos];
+            curDist=curDist+1;
+        }
+        
+        return result(visited,amount,amount[0],0);
+    }
+}
