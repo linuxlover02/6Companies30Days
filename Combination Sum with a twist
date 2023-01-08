@@ -1,0 +1,26 @@
+class Solution {
+    public List<List<Integer>> combinationSum3(int k, int n) {
+        List<List<Integer>> list = new ArrayList<>();
+        List<Integer> curr = new ArrayList<>();
+        helper(list,curr,n,1,k,0);
+        return list;
+    }
+
+    public void helper(List<List<Integer>> list, List<Integer> curr, int n, int curNum, int k,int sum){
+        if(k==0){
+            if(sum==n){
+                List<Integer> ans = new ArrayList<>(curr);
+                list.add(ans);
+            }
+            return;
+        }
+        if(curNum>9) return;
+        if((curNum+sum)<=n){
+            curr.add(curNum);
+            helper(list,curr,n,curNum+1,k-1,sum+curNum);
+            curr.remove(curr.size()-1);
+            helper(list,curr,n,curNum+1,k,sum);
+        }
+        return;
+    }
+}
