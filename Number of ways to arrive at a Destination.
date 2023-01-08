@@ -1,0 +1,52 @@
+class Solution {
+    class Pair{
+        int time;
+        int val;
+        Pair(int val, int time){
+            this.time=time; this.val=val;
+        }
+    }
+
+    public int countPaths(int n, int[][] roads) {
+        ArrayList<ArrayList<Pair>> adj = new ArrayList<>();
+        for(int i=0; i<n; i++){
+            adj.add(new ArrayList<>());
+        }
+
+        for(int j=0; j<roads.length; j++){
+            int u=roads[j][0];
+            int v=roads[j][1];
+            int t=roads[j][2];
+            adj.get(u).add(new Pair(v,t));
+            adj.get(v).add(new Pair(u,t));
+        }
+
+        int mod = 1000000007;
+        int time[] = new int[n];
+        int ways[] = new int[n];
+
+        Arrays.fill(time,Integer.MAX_VALUE);
+        time[0]=0; ways[0]=1;
+
+        PriorityQueue<Pair> pq = new PriorityQueue<>((x,y)->x.time-y.time);
+        pq.add(new Pair(0,0));
+
+        while(!pq.isEmpty()){
+            Pair curNode = pq.poll(); 
+            int curVal=curNode.val, curTime=curNode.time;
+            for(Pair adjNode: adj.get(curVal)){
+                if(time[adjNode.val]>(curTime+adjNode.time)){
+                    time[adjNode.val]=curTime+adjNode.time;
+                    pq.add(new Pair(adjNode.val,curTime+adjNode.time));
+                    ways[adjNode.val]=ways[curVal];
+                }else if(time[adjNode.val]==(curTime+adjNode.time)){
+                    ways[adjNode.val]+=ways[curVal];
+                    ways[adjNode.val]%=mod;
+                }                
+            }
+        }     
+        return ways[n-1];   
+    }
+            
+    
+}
