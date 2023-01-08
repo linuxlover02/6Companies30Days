@@ -1,0 +1,18 @@
+class Solution {
+    public int maxRotateFunction(int[] nums) {
+        int n=nums.length;
+        int arrSum=0;
+        int totalSum=0;
+        for(int i=0; i<n; i++){
+            arrSum+=nums[i];
+            totalSum+=(i*nums[i]);
+        }
+        int res = totalSum;
+        for(int j=1; j<n; j++){
+            totalSum=totalSum+arrSum;
+            totalSum-=(nums[n-j]*(n));
+            res=Math.max(res,totalSum);
+        }
+        return res;
+    }
+}
