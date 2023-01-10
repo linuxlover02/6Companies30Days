@@ -1,0 +1,45 @@
+class Solution {
+    class Transactions{
+        String name; int time; int amount; String city; 
+        Transactions(String str){
+            String arr[] = str.split(",");
+            name=arr[0]; 
+            time=Integer.parseInt(arr[1]); 
+            amount=Integer.parseInt(arr[2]); 
+            city=arr[3];
+        }
+    }
+
+    public List<String> invalidTransactions(String[] transactions) {
+        HashMap<String,ArrayList<Transactions>> map = new HashMap<>();
+        for(String trans: transactions){
+            Transactions t = new Transactions(trans);
+            map.putIfAbsent(t.name,new ArrayList<>());
+            map.get(t.name).add(t);
+        }
+
+        List<String> ans = new ArrayList<>();
+        for(String tran: transactions){
+            Transactions t = new Transactions(tran);
+            ArrayList<Transactions> temp = map.get(t.name);
+            if(!isValid(t,temp)){
+                ans.add(tran);
+            }
+        }
+
+        return ans;
+    }
+
+
+    boolean isValid(Transactions t, ArrayList<Transactions> temp){
+        if(t.amount>1000){
+            return false;
+        }else{
+            for(Transactions trans: temp){
+                int diff=Math.abs(t.time-trans.time);
+                if(diff<=60 && !(t.city).equals(trans.city)) return false;
+            }
+        }
+        return true;
+    }
+}
