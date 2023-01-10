@@ -1,0 +1,30 @@
+class Solution {
+
+    class Pair{
+        int index; int cap;
+        Pair(int index, int cap){
+            this.index=index; this.cap=cap;
+        }
+    }
+
+    public int findMaximizedCapital(int k, int w, int[] profits, int[] capital) {
+        int n=capital.length;
+        PriorityQueue<Integer> prft = new PriorityQueue<>(Collections.reverseOrder());
+        PriorityQueue<Pair> cptl = new PriorityQueue<>((a,b)->(a.cap-b.cap));
+        for(int i=0; i<n; i++){
+            cptl.add(new Pair(i,capital[i]));
+        }
+
+        int cur=w;
+        while(k>0){
+            while(cptl.size()!=0 && cptl.peek().cap<=cur){
+                Pair p = cptl.poll();
+                prft.add(profits[p.index]);
+            }
+            if(prft.size()==0) break;
+            cur+=prft.poll();
+            k--;
+        }
+        return cur;
+    }
+}
