@@ -1,0 +1,55 @@
+class Solution {
+    public boolean validSquare(int[] p1, int[] p2, int[] p3, int[] p4) {
+        int x1 = p1[0]; int y1 = p1[1];  
+        int x2 = p2[0]; int y2 = p2[1];
+        int x3 = p3[0]; int y3 = p3[1];
+        int x4 = p4[0]; int y4 = p4[1]; 
+             
+        double d12 = dist(x1,x2,y1,y2);
+        double d13 = dist(x1,x3,y1,y3);
+        double d14 = dist(x1,x4,y1,y4);
+        System.out.println(d12);
+        System.out.println(d13);
+        System.out.println(d14);
+        if(d12==d13){
+            double d24 = dist(x2,x4,y2,y4);
+            double d34 = dist(x3,x4,y3,y4);
+            double d23 = dist(x2,x3,y2,y3);
+            if(d24==d34 && d24==d12 && d14==d23 && d24!=0){
+                return true;
+            }else{
+                return false;
+            }
+        }else if(d12==d14){
+            double d24 = dist(x2,x4,y2,y4);
+            double d23 = dist(x2,x3,y2,y3);
+            double d43 = dist(x3,x4,y3,y4);
+            if(d23==d43 && d23==d12 && d13==d24 && d24!=0){
+                return true;
+            }else{
+                return false;
+            }
+
+        }else if(d13==d14){
+            double d24 = dist(x2,x4,y2,y4);
+            double d23 = dist(x2,x3,y2,y3);
+            double d43 = dist(x3,x4,y3,y4);
+            System.out.println(d23);
+            System.out.println(d24);
+            System.out.println(d43);
+            if(d24==d23 && d24==d13 && d12==d43 && d24!=0){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+    }
+
+    double dist(int x1, int x2, int y1, int y2){
+        int diff = (int)Math.pow((x1-x2),2);
+        int diff2= (int)Math.pow((y1-y2),2);
+        return Math.sqrt(diff+diff2);
+    }
+}
