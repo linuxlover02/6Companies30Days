@@ -1,0 +1,74 @@
+class Solution {
+    public int[] getBiggestThree(int[][] grid) {
+        int m=grid.length; int n=grid[0].length;
+        PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
+        for(int i=0; i<m; i++){
+            for(int j=0; j<n; j++){
+                helper(i,j,m,n,pq,grid);
+            }
+        }
+        HashSet<Integer> set = new HashSet<>(); 
+        while(!pq.isEmpty() && set.size()<3){
+            set.add(pq.poll());
+        }
+
+        Integer ans[] = new Integer[set.size()]; 
+        int idx=0;
+        for(int val: set){
+            ans[idx++]=val;
+        }
+        Arrays.sort(ans,Collections.reverseOrder());
+
+        idx=0;
+        int answer[] = new int[set.size()];
+        for(int value: ans){
+            answer[idx++]=value;
+        }
+        return answer;
+    }
+
+    public void helper(int i, int j, int m, int n, PriorityQueue<Integer> pq, int[][] grid){
+        int max = (Math.min(m,n)+1)/2;
+        pq.add(grid[i][j]);        
+        for(int k=1; k<max; k++){
+            int val = sum(i,j,k,m,n,grid);
+            if(val!=-1) pq.add(val);            
+        }
+    }
+
+    public int sum(int i, int j, int k, int m, int n, int[][] grid){
+        int leftTop=0; int rightTop=0; int leftBot=0; int rightBot=0;       
+
+        // topLeft Side
+        for(int t=0; t<=k; t++){
+            if((i+t)>=m || (j-t)<0) return -1;
+            leftTop+=grid[i+t][j-t];
+        }
+
+        // topRight Side
+        for(int t=0; t<=k; t++){
+            if((i+t)>=m || (j+t)>=n) return -1;
+            rightTop+=grid[i+t][j+t];
+        }
+
+         // botLeft Side
+         i=i+k; j=j-k;
+        for(int t=0; t<=k; t++){
+            if((i+t)>=m || (j+t)>=n) return -1;
+            leftBot+=grid[i+t][j+t];
+        }
+
+
+         // botRight Side
+         j=j+k+k;
+        for(int t=0; t<=k; t++){
+            if((i+t)>=m || (j-t)<0) return -1;
+            rightBot+=grid[i+t][j-t];
+        }
+        i-=k; j-=k;
+        
+        int ans=leftTop+rightTop+leftBot+rightBot;
+        ans-=(grid[i][j]+grid[i+k][j-k]+grid[i+k][j+k]+grid[i+k+k][j]);                  
+        return ans;
+    }
+}
