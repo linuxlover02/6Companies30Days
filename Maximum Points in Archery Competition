@@ -1,0 +1,53 @@
+class Solution {
+    
+    public int[] maximumBobPoints(int numArrows, int[] aliceArrow) {        
+        int N = (1<<12)-1;
+        int count = 0, mask = 0;
+        for(int i=1; i<=N; i++){
+            if(isMaskPossible(numArrows,aliceArrow,i)){
+                int point = calculatePoint(i);
+                if(point > count){
+                    count = point; mask = i;
+                }
+            }
+        }
+
+        int res[] = new int[12];
+        int score = 11;
+        int sum = 0;        
+        while(mask>0){
+            if((mask&1)==1){
+                res[score]=aliceArrow[score]+1;
+                sum+=aliceArrow[score]+1;
+             }
+            score--;
+            mask>>=1;
+        } 
+        res[0]=numArrows-sum;
+        return res;
+    }
+
+    int calculatePoint(int num){
+        int total=0;
+        int score=11;
+        while(num>0){
+            total+=(score*(num & 1));
+            score--;
+            num>>=1;
+        }
+        return total;
+    }
+
+    boolean isMaskPossible(int arrows, int []aliceArrows, int mask){
+        int arrowUsed = 0;
+        int score=11;
+        while(mask>0){
+            if((mask&1)==1){
+                arrowUsed+=(aliceArrows[score]+1);
+            }
+            mask>>=1;
+            score--;
+        }
+        return arrowUsed<=arrows;
+    }
+}
