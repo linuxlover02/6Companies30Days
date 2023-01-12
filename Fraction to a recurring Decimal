@@ -1,0 +1,43 @@
+class Solution {
+    public String fractionToDecimal(int n, int d) {
+       StringBuilder ans = new StringBuilder("");
+       if(n==0){
+           return "0";
+       }
+       long num = n; long den = d;
+       if(num<0 && den<0){
+           num=-num; den=-den;
+       }else if(num<0 || den<0){
+           ans.append("-");
+           num=Math.abs(num); den=Math.abs(den);
+       }
+       System.out.print(den);
+
+       HashMap<Long,Integer> map = new HashMap<>();
+       long q= num / den;
+       long r= num % den;
+       boolean repeat=false;
+       ans.append(q);
+       if(r==0) return ans.toString();
+       map.put(r,ans.length()+1);
+       ans.append(".");           
+       while(r!=0){
+           r*=10;
+           while(r<den){
+               r*=10;
+               ans.append("0");
+           }
+           q=r/den;
+           r=r%den;
+           ans.append(q);      
+           if(map.containsKey(r)){
+               ans.insert(map.get(r),"(");
+               ans.append(")");
+               return ans.toString();
+            }else{
+                map.put(r,ans.length());
+            }         
+        }
+       return ans.toString();
+    }    
+}
