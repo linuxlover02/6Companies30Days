@@ -1,0 +1,25 @@
+class Solution {
+    public int findIntegers(int n) {
+        int dp[] = new int[33];
+        int val=1;
+        for(int i=2; i<33; i++){
+            dp[i]=dp[i-1]+dp[i-2]+val;
+            val<<=1;
+        }
+        int ones = helper(n,dp);
+        return n-ones+1;            
+    }
+
+    int helper(int n, int dp[]){
+        double pow = Math.log(n)/Math.log(2);
+        if(pow==(int)pow) return dp[(int)pow];
+        pow = Math.floor(pow);
+        int ans=dp[(int)pow];
+
+        int lowestNumber = 1<<(int)pow;
+        int left=n-lowestNumber;
+        if(left>=lowestNumber/2) ans+=dp[(int)pow-1]+(left-lowestNumber/2+1);
+        else ans+=helper(left,dp);
+        return ans;
+    }
+}
