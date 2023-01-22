@@ -1,0 +1,36 @@
+class Solution {
+    public int minMutation(String start, String end, String[] bank) {
+        HashSet<String> set = new HashSet<>();
+        for(String s: bank) set.add(s);
+
+
+        if(!set.contains(end)) return -1;
+        if(start.equals(end)) return 0;
+
+        char arr[] = {'A','C','G','T'};
+        ArrayDeque<String> q = new ArrayDeque<>();
+        HashSet<String> visit = new HashSet<>();
+        set.add(start);
+        q.add(start); int ans=0;
+        while(!q.isEmpty()){
+            int size = q.size();
+            ans++;
+            while(size-->0){
+                String curr = q.poll();
+                StringBuilder str = new StringBuilder(curr);
+                if(curr.equals(end)) return ans-1;
+                 for(int i=0; i<8; i++){            
+                    for(int j=0; j<4; j++){
+                        str.setCharAt(i,arr[j]);
+                        if(set.contains(str.toString()) && !visit.contains(str.toString())){
+                            q.add(str.toString());
+                            visit.add(str.toString());
+                        }
+                        str = new StringBuilder(curr);
+                    }
+                }
+            }
+        }
+        return -1;        
+    }
+}
