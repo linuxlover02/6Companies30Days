@@ -1,0 +1,73 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode removeZeroSumSublists(ListNode head) {
+        // if(head.val==0) return null;
+        Stack<Integer> st = new Stack<>();
+        st.push(head.val);
+
+        ArrayList<HashSet<Integer>> list = new ArrayList<>();
+        list.add(new HashSet<>());
+
+        list.get(0).add(head.val);
+
+        ListNode curr = head.next;
+
+        while(curr!=null){
+            HashSet<Integer> set = (list.size()!=0)?list.get(list.size()-1):new HashSet<>();
+            int curVal = curr.val;
+            if(curVal==0){
+                curr=curr.next;
+                continue;
+            }
+           
+            if(set.contains(-curVal)){
+                while(!st.isEmpty() && curVal!=0){
+                    curVal+=st.peek();
+                    list.remove(list.size()-1);
+                    st.pop();
+                }
+            }else{
+                HashSet<Integer> newSet = new HashSet<>();
+                newSet.add(curVal);
+                for(int val: set){
+                    newSet.add(val+curVal);
+                }
+                list.add(newSet);
+                st.push(curVal);
+            }
+            curr=curr.next;
+        }
+
+        ArrayList<Integer> nodes = new ArrayList<>();
+        while(!st.isEmpty()){
+            nodes.add(st.pop());
+        }
+        Collections.reverse(nodes);
+        for(int i=0; i<nodes.size(); i++){
+            System.out.print(nodes.get(i)+" ");
+        }
+
+        ListNode he = new ListNode(-1,null);
+        ListNode prev = he;
+        int idx=0;
+        while(idx<nodes.size()){
+            if(nodes.get(idx)==0){
+                idx++; continue;
+            }
+            ListNode temp = new ListNode(nodes.get(idx++));
+            prev.next = temp;
+            prev=temp;
+        }
+
+        return he.next;
+    }
+}
