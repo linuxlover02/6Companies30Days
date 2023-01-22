@@ -1,0 +1,39 @@
+class Solution {
+    public int maxAreaOfIsland(int[][] grid) {
+        int m=grid.length;
+        int n=grid[0].length;
+        boolean visited[][] = new boolean[m][n];
+        int res = Integer.MIN_VALUE;
+        for(int i=0; i<m; i++){
+            for(int j=0; j<n; j++){
+                if(grid[i][j]==1 && !visited[i][j]){
+                    visited[i][j]=true;
+                    int ans=helper(i,j,grid,visited,m,n);
+                    res=Math.max(res,ans);
+                }
+            }
+        }     
+        if(res==Integer.MIN_VALUE) return 0;
+        return res;  
+    }
+
+    int helper(int row, int col, int[][]grid, boolean visited[][], int m, int n){
+        
+        int dx[] = {-1,1,0,0};
+        int dy[] = {0,0,-1,1};
+        int ans = 0;
+        for(int i=0; i<4; i++){
+            int nRow = row+dx[i]; int nCol = col+dy[i];
+            if(isPossible(nRow,nCol,m,n,grid,visited)){
+                visited[nRow][nCol]=true;
+                ans+=helper(nRow,nCol,grid,visited,m,n);
+            }
+        }
+        return ans+1;
+    }
+
+    boolean isPossible(int nRow, int nCol, int m, int n, int[][]grid, boolean visited[][]){
+        if(nRow<0 || nRow>=m || nCol<0 || nCol>=n || grid[nRow][nCol]==0 || visited[nRow][nCol]) return false;
+        return true;
+    }
+}
