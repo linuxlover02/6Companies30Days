@@ -1,0 +1,44 @@
+class Solution {
+    class Pair{
+        int freq; int val;
+        Pair(int val, int freq){
+            this.val=val; this.freq=freq;
+        }
+    }
+
+    public int[] rearrangeBarcodes(int[] barcodes) {
+        int n=barcodes.length;
+        int ans[] = new int[n];
+        Map<Integer,Integer> map = new HashMap<>();
+        
+        for(int i=0; i<n; i++){
+            map.put(barcodes[i],map.getOrDefault(barcodes[i],0)+1);
+        }
+
+        PriorityQueue<Pair> pq = new PriorityQueue<>((a,b)->b.freq-a.freq);
+
+        for(Map.Entry<Integer,Integer> mp: map.entrySet()){
+            pq.add(new Pair(mp.getKey(),mp.getValue()));
+        }
+
+        int idx=0;
+        while(pq.size()>1){
+            Pair first = pq.poll();
+            Pair second = pq.poll();
+            ans[idx++]=first.val;
+            ans[idx++]=second.val;
+            
+            if(first.freq!=1){
+                pq.add(new Pair(first.val,first.freq-1));
+            }
+            if(second.freq!=1){
+                pq.add(new Pair(second.val,second.freq-1));
+            }
+        }
+        if(pq.size()!=0){
+            ans[idx++]=pq.poll().val;
+        } 
+
+        return ans;
+    }
+}
