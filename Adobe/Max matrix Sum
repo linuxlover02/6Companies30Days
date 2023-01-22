@@ -1,0 +1,23 @@
+class Solution {
+    public long maxMatrixSum(int[][] matrix) {
+        long sum = 0; int n=matrix.length;
+        int min = Integer.MAX_VALUE; int total=0;
+        boolean found=false;
+        for(int i=0; i<n; i++){
+            for(int j=0; j<n; j++){
+                sum+=Math.abs(matrix[i][j]);
+                if(matrix[i][j]==0) found=true;
+                if(matrix[i][j]<0){
+                    total++;
+                }
+                min=Math.min(min,Math.abs(matrix[i][j]));
+            }
+        }  
+        if(total%2==0 || found==true){
+            return sum;
+        }else{
+            return sum-(2*min);
+        }
+    }
+    // [[2,9,3],[5,4,-4],[1,7,1]]
+}
