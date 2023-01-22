@@ -1,0 +1,30 @@
+class Solution {
+    public boolean increasingTriplet(int[] nums) {
+        int n=nums.length;
+        int tail[] = new int[n];
+        tail[0] = nums[0];
+        int idx=0;
+        for(int i=1; i<n; i++){
+            if(nums[i]>tail[idx]){
+                tail[++idx]=nums[i];
+            }else{
+                int ceil = helper(tail,nums[i],idx);
+                tail[ceil]=nums[i];
+            }
+        }        
+        return idx>=2;
+    }    
+
+    public int helper(int[]tail, int val, int idx){
+        int low=0; int high=idx;
+        while(low<high){
+            int mid=(low+high)/2;
+            if(tail[mid]<val){
+                low=mid+1;
+            }else{
+                high=mid;
+            }
+        }
+        return high;
+    }
+}
