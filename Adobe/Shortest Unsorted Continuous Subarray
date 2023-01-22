@@ -1,0 +1,26 @@
+class Solution {
+    public int findUnsortedSubarray(int[] nums) {
+        int n=nums.length;
+        PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());   
+        int endIdx=-1;
+        pq.add(nums[0]);
+        for(int i=1; i<n; i++){
+            if(pq.peek()>nums[i]){
+                endIdx=i;
+            }
+            pq.add(nums[i]);
+        }
+        if(endIdx==-1) return 0;
+
+        pq = new PriorityQueue<>();
+        int startIdx=-1;
+        pq.add(nums[n-1]);
+        for(int i=n-2; i>=0; i--){
+            if(pq.peek()<nums[i]){
+                startIdx=i;
+            }
+            pq.add(nums[i]);
+        }
+        return endIdx-startIdx+1;
+    }
+}
