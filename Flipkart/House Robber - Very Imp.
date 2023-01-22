@@ -1,0 +1,19 @@
+class Solution {
+    HashMap<TreeNode,Integer> dp;
+
+    public int rob(TreeNode root) {
+        dp = new HashMap<>();
+        return helper(root);        
+    }
+
+    public int helper(TreeNode root){
+        if(root==null) return 0;
+        if(dp.containsKey(root)) return dp.get(root);
+        int val = 0;
+        if(root.left!=null) val+= helper(root.left.left)+helper(root.left.right);
+        if(root.right!=null) val+=helper(root.right.left)+helper(root.right.right);
+        int res = Math.max((root.val+val),helper(root.left)+helper(root.right));
+        dp.put(root,res);
+        return res;
+    }
+}
