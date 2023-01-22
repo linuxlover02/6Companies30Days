@@ -1,0 +1,52 @@
+class Solution {
+    class Pair implements Comparable<Pair>{
+        int freq;
+        String str;
+        Pair(String str, int freq){
+            this.str=str; this.freq=freq;
+        }
+
+        public int compareTo(Pair a){
+            if(a.freq!=this.freq){
+                return a.freq-this.freq;
+            }
+
+            String str1 = a.str;
+            String str2 = this.str;
+
+            for(int i=0; i<Math.min(str1.length(),str2.length()); i++){
+                char c1 = str1.charAt(i);
+                char c2 = str.charAt(i);
+                if(c1<c2){
+                    return 1;
+                }else if(c1>c2){
+                    return -1;
+                }
+            }
+
+            if(str1.length()<str2.length()){
+                return 1;
+            }
+            return -1;
+        }
+
+    }
+    public List<String> topKFrequent(String[] words, int k) {
+        HashMap<String,Integer> map = new HashMap<>();
+        for(String str: words){
+            map.put(str,map.getOrDefault(str,0)+1);
+        }
+        PriorityQueue<Pair> pq = new PriorityQueue<>();
+
+        for(Map.Entry<String,Integer> mp: map.entrySet()){
+            pq.add(new Pair(mp.getKey(),mp.getValue()));
+        }
+
+        List<String> ans = new ArrayList<>();
+        for(int i=0; i<k; i++){
+            ans.add(pq.poll().str);
+        }
+
+        return ans;        
+    }
+}
