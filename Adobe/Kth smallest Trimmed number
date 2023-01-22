@@ -1,0 +1,58 @@
+
+ class Pair implements Comparable<Pair>{
+        int idx; String value;
+        Pair(int idx, String value){
+            this.idx=idx; this.value=value;
+        }
+        public int compareTo(Pair a){
+           String str1=this.value;
+           String str2=a.value;
+           int minLength = Math.min(str1.length(),str2.length());
+           if(str1.length()>str2.length()){
+               return 1;
+           }else if(str1.length()<str2.length()){
+               return -1;
+           }
+
+           for(int i=0; i<minLength; i++){
+               int num1 = Character.getNumericValue(str1.charAt(i));
+               int num2 = Character.getNumericValue(str2.charAt(i));
+               if(num1>num2){
+                   return 1;
+               }else if(num1<num2){
+                   return -1;
+               }     
+           }
+           return this.idx-a.idx;       
+        }
+}
+
+class Solution {
+   
+
+    public int[] smallestTrimmedNumbers(String[] nums, int[][] queries) {
+        int s=nums[0].length();
+        int ans[] = new int[queries.length];
+
+
+        for(int i=0; i<(queries.length); i++){
+            int arr[]=queries[i];
+            ArrayList<Pair> list = new ArrayList<>();
+           
+            if(queries[i][1]>=s){
+                int j=0;
+                for(String val: nums){
+                    list.add(new Pair(j++,val));
+                }
+            }else{
+                int j=0;
+                for(String val: nums){
+                    list.add(new Pair(j++, val.substring(s-arr[1])));
+                }                
+            }
+            Collections.sort(list);
+            ans[i]=list.get(arr[0]-1).idx;
+        }
+        return ans;
+    }
+}
