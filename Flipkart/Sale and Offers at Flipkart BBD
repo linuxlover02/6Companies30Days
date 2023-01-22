@@ -1,0 +1,52 @@
+class Solution {
+    
+    public int shoppingOffers(List<Integer> price, List<List<Integer>> special, List<Integer> needs) {
+        Map<String,Integer> dp = new HashMap<>();        
+        return helper(price,special,needs,dp);            
+    }
+
+    String getNeedString(List<Integer> needs){
+        StringBuilder str = new StringBuilder();
+        for(int i=0; i<needs.size(); i++){
+           str.append(needs.get(i));                    
+        } 
+        return str.toString();
+    }
+
+    
+    public int helper(List<Integer> price, List<List<Integer>> special, List<Integer> needs, Map<String,Integer> dp){
+        String needKey = getNeedString(needs);
+        if(dp.containsKey(needKey)) return dp.get(needKey);
+
+        int minPrice = 0;
+        for(int i=0; i<needs.size(); i++){
+            minPrice+=(needs.get(i)*price.get(i));                      
+        }
+        
+        for(int i=0; i<special.size(); i++){
+            List<Integer> curr = special.get(i);
+            if(isPossible(curr,needs)){
+                List<Integer> curNeed = reduceNeed(curr,needs);
+                minPrice = Math.min(minPrice,curr.get(curr.size()-1)+helper(price,special,curNeed,dp));                
+            }
+        }
+        dp.put(needKey,minPrice);
+        return  minPrice;     
+    }
+
+    List<Integer> reduceNeed(List<Integer> curr, List<Integer> need){
+        List<Integer> curNeed = new ArrayList<>();
+        for(int i=0; i<need.size(); i++){
+            curNeed.add(need.get(i)-curr.get(i));
+        }
+        return curNeed;
+    }
+
+    boolean isPossible(List<Integer> cur, List<Integer> need){
+        for(int i=0; i<need.size(); i++){
+            if(cur.get(i)>need.get(i)) return false;
+        }
+        return true;
+    }
+}
+
