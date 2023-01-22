@@ -1,0 +1,89 @@
+ /* // This is MountainArray's API interface.
+ * // You should not implement it, or speculate about its implementation
+ * interface MountainArray {
+ *     public int get(int index) {}
+ *     public int length() {}
+ * }
+ */
+ 
+class Solution {
+    HashMap<Integer,Integer> map;
+    public int findInMountainArray(int target, MountainArray mount) {
+        int n = mount.length();
+        map = new HashMap<>();
+        int peak = peakElement(mount,n);
+        // System.out.println(peak);
+        if(map.get(peak)==target) return peak;
+
+        int leftAns = leftSearch(mount,target,peak);
+        if(leftAns!=-1) return leftAns;
+
+        return rightSearch(mount,target,peak,n);
+    }
+
+    int leftSearch(MountainArray mount, int target, int peak){
+        int left=0; int right=peak-1;
+        int midVal = Integer.MAX_VALUE;
+        while(left<=right){
+            int mid = (left+right)/2;
+            midVal = (map.containsKey(mid))?map.get(mid):mount.get(mid);
+            if(midVal==target) return mid;
+            else if(midVal<target){
+                left=mid+1;
+            }else{
+                right=mid-1;
+            }
+        }
+        return -1;
+    }
+
+    int rightSearch(MountainArray mount, int target, int peak, int n){
+        int left=peak+1; int right=n-1;
+        int midVal = Integer.MAX_VALUE;
+        while(left<=right){
+            int mid = (left+right)/2;
+            midVal = (map.containsKey(mid))?map.get(mid):mount.get(mid);
+            if(midVal==target) return mid;
+            else if(midVal<target){
+                right=mid-1;
+            }else{
+                left=mid+1;
+            }
+        }
+        return -1;
+    }
+
+    int peakElement(MountainArray mount, int n){
+        int left=1; int right=n-2;
+        int leftVal = Integer.MAX_VALUE;
+        int rightVal = Integer.MAX_VALUE;
+        int midVal = Integer.MAX_VALUE;
+        int i=1;
+        while(left<=right){
+            int mid=(left+right)/2;
+            midVal = mount.get(mid);
+            map.put(mid,midVal);
+
+            leftVal = (map.containsKey(mid-1))?map.get(mid-1):mount.get(mid-1);
+            map.put(mid-1,leftVal);
+     
+            rightVal = (map.containsKey(mid+1))?map.get(mid+1):mount.get(mid+1);
+            map.put(mid+1,rightVal);
+    
+            System.out.println(midVal);
+            System.out.println(rightVal);
+            System.out.println(leftVal);
+
+            if(leftVal<midVal && rightVal<midVal){
+                return mid;
+            } 
+            else if(leftVal<midVal && midVal<rightVal){
+                left=mid+1;                                               
+            }else{
+                right=mid-1;                
+            }
+        }
+
+        return left;
+    }
+}
