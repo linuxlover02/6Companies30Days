@@ -1,0 +1,66 @@
+class Solution {
+    public int totalFruit(int[] fruits) {
+        int n=fruits.length;
+        
+        // elem[0][0] will store first fruit and elem[0][1] will store last ocurrence index of first fruit
+        int elem[][] = new int[2][2];
+        elem[0][0]=-1;
+        elem[1][0]=-1;
+
+        HashSet<Integer> set = new HashSet<>();
+
+        int res = Integer.MIN_VALUE;
+
+        int cur=0;
+
+        // Iterating over all trees:
+        for(int i=0; i<n; i++){
+            set.add(fruits[i]);
+
+            // checking if there are more than two types of food we have;
+            if(set.size()>2){
+                // updating the result:
+                res=Math.max(res,cur);
+
+                // since at index i new fruit has been included so we have to remove the one fruit which was include first from our basket(set);
+                int prev = fruits[i-1];
+
+                // checking which fruit we have to remove:
+                if(elem[0][0]==fruits[i-1]){
+                    // if elem[0][0]=prev fruit then we have to remove elem[0][1]
+                    set.remove(elem[1][0]);
+                    int lastIndex=elem[1][1];
+
+                    // updating the cur result
+                    cur=i-lastIndex;
+
+                    // updating the elem array with new included fruit data
+                    elem[1][0]=fruits[i];
+                    elem[1][1]=i;                    
+                }else{
+                     // if elem[1][0]=prev fruit then we have to remove elem[0][0]
+                    set.remove(elem[0][0]);
+                    int lastIndex=elem[0][1];
+                    cur=i-lastIndex;
+                    elem[0][0]=fruits[i];
+                    elem[0][1]=i;
+                }
+            }else{
+                // if set size()<=2 we can include this tree so we increase the curr
+                cur++;
+
+                // updating the last index of cur fruit
+                if(elem[0][0]==-1 || elem[0][0]==fruits[i]){
+                    elem[0][0]=fruits[i];
+                    elem[0][1]=i;
+                }else{
+                    elem[1][0]=fruits[i];
+                    elem[1][1]=i;
+                }                                
+            }
+        }
+        if(res==Integer.MIN_VALUE) return n;
+
+        return Math.max(res,cur);
+    }
+}
