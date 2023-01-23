@@ -1,0 +1,41 @@
+class Solution {
+
+    void merge(int nums[], int left, int mid, int right){
+        int leftArr[] = new int[mid-left+1];
+        int rightArr[] = new int[right-mid];
+        for(int i=left; i<=mid; i++){
+            leftArr[i-left]=nums[i];
+        }
+        for(int i=mid+1; i<=right; i++){
+            rightArr[i-mid-1]=nums[i];
+        }
+        int i1=0; int j1=0;
+        int idx = left;
+        while(i1<leftArr.length && j1<rightArr.length){
+            if(leftArr[i1]<rightArr[j1]){
+                nums[idx++]=leftArr[i1++];
+            }else{
+                nums[idx++]=rightArr[j1++];
+            }
+        }
+        while(i1<leftArr.length){
+            nums[idx++]=leftArr[i1++];
+        }
+        while(j1<rightArr.length){
+            nums[idx++]=rightArr[j1++];
+        }
+    }
+
+    void divide(int nums[],int left, int right){
+        if(left>=right) return;
+        int mid = left+(right-left)/2;
+        divide(nums,left,mid);
+        divide(nums,mid+1,right);
+        merge(nums,left,mid,right);
+    }
+
+    public int[] sortArray(int[] nums) {
+        divide(nums,0,nums.length-1);
+        return nums;        
+    }
+}
