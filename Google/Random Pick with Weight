@@ -1,0 +1,28 @@
+class Solution {
+
+    int preSum[];
+    public Solution(int[] w1) {
+        int n = w1.length;
+        preSum = new int[n];
+        preSum[0]=w1[0];
+        for(int i=1; i<n; i++){
+            preSum[i]=w1[i]+preSum[i-1];
+        }
+    }
+    
+    public int pickIndex() {
+        int upperBound = preSum[preSum.length-1]+1;
+        Random rand = new Random();
+        int randVal = (int)rand.nextInt(upperBound);
+        int low=0; int high=preSum.length-1;
+        while(low<high){
+            int mid = (low+high)/2;
+            if(preSum[mid]<=randVal){
+                low=mid+1;
+            }else{
+                high=mid;
+            }
+        }
+        return high;
+    }
+}
