@@ -1,0 +1,24 @@
+class Solution {
+    public List<String> restoreIpAddresses(String s) {
+        int n = s.length();
+        List<String> ans = new ArrayList<>();
+        if(n<4 || n>12) return ans;
+
+        HashSet<String> set = new HashSet<>();
+        for(int i=0; i<=255; i++){
+            set.add(Integer.toString(i));
+        }
+        for(int i=0; i<=Math.min(n-1,2); i++){
+            if(!set.contains(s.substring(0,i+1))) continue;
+            for(int j=i+1; j<=Math.min(n-1,(i+3)); j++){
+                if(!set.contains(s.substring(i+1,j+1))) continue;
+                for(int k=j+1; k<=Math.min(n-1,(j+3)); k++){
+                    if((k+1)==n || !set.contains(s.substring(j+1,k+1)) || !set.contains(s.substring(k+1))) continue;
+                    String res = s.substring(0,i+1)+"."+s.substring(i+1,j+1)+"."+s.substring(j+1,k+1)+"."+s.substring(k+1);
+                    ans.add(res);
+                }
+            }
+        }
+        return ans;
+    }
+}
