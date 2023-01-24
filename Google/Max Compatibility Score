@@ -1,0 +1,36 @@
+class Solution {
+    int dp[][];
+    public int maxCompatibilitySum(int[][] students, int[][] mentors) {
+        int m = students.length;
+        int len = (1<<m);
+        dp = new int[len][len];
+        for(int row[]: dp){
+            Arrays.fill(row,-1);
+        }
+        return helper(students,mentors,0,0,m);
+    }
+
+    int helper(int[][]students, int[][] mentors, int stdntMask, int mentMask, int m){
+        if((1+stdntMask)==(1<<m) && (1+mentMask)==(1<<m)) return 0;
+        if(dp[stdntMask][mentMask]!=-1) return dp[stdntMask][mentMask];
+        int ans = Integer.MIN_VALUE;
+        int n = mentors[0].length;
+
+        for(int i=0; i<m; i++){
+            if((stdntMask & (1<<i)) == 0){
+                for(int j=0; j<m; j++){
+                    if((mentMask & (1<<j))==0){
+                        int score = 0;
+                        for(int k=0; k<n; k++){
+                            if(students[i][k]==mentors[j][k]) score++;
+                        }
+                        score+=helper(students,mentors,stdntMask|(1<<i),mentMask|(1<<j),m);
+                        ans = Math.max(ans,score);
+                    }
+                }
+            }
+        }
+
+        return dp[stdntMask][mentMask]=ans;
+    }
+}
