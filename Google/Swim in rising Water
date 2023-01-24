@@ -1,0 +1,48 @@
+class Solution {
+
+    public int swimInWater(int[][] grid) {
+        int n = grid.length;
+        int max = grid[0][0];
+        for(int i=0; i<n; i++){
+            for(int j=0; j<n; j++){
+                max = Math.max(grid[i][j],max);
+            }
+        }
+        boolean path[][] = new boolean[n][n];
+        int low=0; int high=max;
+        while(low<high){
+            int mid = (low+high)/2;
+            path = new boolean[n][n];
+            if(mid>=grid[0][0] && helper(grid,mid,grid[0][0],0,0,n,path)){
+                high=mid;
+            }else{
+                low=mid+1;
+            }
+        }
+        return high;
+    }
+
+    boolean helper(int[][] grid, int maxTime, int curTime, int row, int col, int n, boolean path[][]){
+        if(row==n-1 && col==n-1) return (maxTime>=Math.max(curTime,grid[row][col]));
+        path[row][col]=true;
+
+        int dx[] = {-1,1,0,0};
+        int dy[] = {0,0,-1,1};
+
+        for(int k=0; k<4; k++){
+            int i = row+dx[k]; int j = col+dy[k];
+            if(isPossible(grid,i,j,n,path)){
+                if(Math.max(curTime,grid[i][j])>maxTime) continue;
+                if(helper(grid,maxTime,Math.max(curTime,grid[i][j]),i,j,n,path)){
+                    return true;
+                }
+            }
+        }         
+        return false;
+    }
+
+    boolean isPossible(int[][]grid, int i, int j, int n, boolean path[][]){
+        if(i<0 || j<0 || i>=n || j>=n || path[i][j]) return false;
+        return true;
+    }
+}
