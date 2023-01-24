@@ -1,0 +1,18 @@
+class Solution {
+    public boolean isPalindrome(int n, int base){
+        String num="";
+        String rev="";
+        while(n!=0){
+            num=n%base+num;
+            rev=rev+n%base;
+            n/=base;
+        }
+        return rev.equals(num);
+    }
+    public boolean isStrictlyPalindromic(int n) {
+        for(int i=2; i<=n-2; i++){
+            if(isPalindrome(n,i)==false) return false;
+        }
+        return true;
+    }
+}
