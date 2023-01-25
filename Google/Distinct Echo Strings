@@ -1,0 +1,23 @@
+class Solution {
+    public int distinctEchoSubstrings(String text) {
+        int n = text.length();
+        int len = n/2;
+
+        HashSet<String> set = new HashSet<>();        
+        for(int i=1; i<=len; i++){
+            int count=0;
+            for(int left=0,right=i; right<n; left++,right++){
+                if(text.charAt(left)==text.charAt(right)){
+                    count++;
+                }else{
+                    count=0;
+                }
+                if(count==i){
+                    count--;
+                    set.add(text.substring(left,right+1));
+                }
+            }
+        }
+        return set.size();
+    }
+}
