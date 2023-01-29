@@ -1,0 +1,25 @@
+class Solution {
+    
+    int arr[];
+    public Solution(int[] nums) {
+        arr = nums;        
+    }
+    
+    public int[] reset() {
+        return arr;
+        
+    }
+    
+    public int[] shuffle() {
+        int solv[] = arr.clone();
+        Random rand = new Random();
+        int upperBound = solv.length;
+        for(int i=0; i<solv.length; i++){
+            int idx = rand.nextInt(upperBound);
+            int temp = solv[i];
+            solv[i] = solv[idx];
+            solv[idx] = temp;
+        }
+        return solv;                
+    }
+}
