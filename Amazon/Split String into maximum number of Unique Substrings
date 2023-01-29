@@ -1,0 +1,24 @@
+class Solution {
+    int ans = Integer.MIN_VALUE;
+    public int maxUniqueSplit(String s) {
+        int n  = s.length();
+        HashSet<String> set = new HashSet<>();
+        helper(set,s,0,n);
+        return ans;
+    }
+
+    void helper(HashSet<String> set, String s, int curIdx, int n){
+        if(curIdx==n){
+            ans=Math.max(ans,set.size());
+            return;
+        }
+        for(int i=curIdx; i<n; i++){
+            String str = s.substring(curIdx,i+1);
+            if(!set.contains(str)){
+                set.add(str);
+                helper(set,s,i+1,n);
+                set.remove(str);
+            }
+        }
+    }
+}
