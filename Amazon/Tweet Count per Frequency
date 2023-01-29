@@ -1,0 +1,38 @@
+class TweetCounts {
+    HashMap<String,ArrayList<Integer>> map;
+    public TweetCounts() {
+        map = new HashMap<>();
+    }
+    
+    public void recordTweet(String tweetName, int time) {
+        map.putIfAbsent(tweetName,new ArrayList<>());
+        map.get(tweetName).add(time);        
+    }
+    
+    public List<Integer> getTweetCountsPerFrequency(String frq, String tweetName, int startTime, int endTime) {
+        int freq = 60;
+        if(frq.equals("hour")){
+            freq = 3600;
+        }else if(frq.equals("day")){
+            freq = 86400;
+        }
+
+
+        int size = (int)Math.ceil(((double)endTime-startTime+1)/freq);
+        List<Integer> ans = new ArrayList<>();
+        for(int i=0; i<size; i++){
+            ans.add(0);
+        }
+        System.out.println(size);
+
+        ArrayList<Integer> list = map.get(tweetName);
+
+        for(int val: list){
+            if(val<startTime || val>endTime) continue;
+            int slot = (int)Math.ceil((val-startTime)/freq);
+            ans.set(slot,ans.get(slot)+1);
+        }
+
+        return ans;
+    }
+}
