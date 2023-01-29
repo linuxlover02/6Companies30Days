@@ -1,0 +1,59 @@
+class Solution {
+    class Pair{
+        int idx; int elem;
+        Pair(int idx, int elem){
+            this.idx=idx; this.elem=elem;
+        }
+    }
+
+    public int maxSumMinProduct(int[] nums) {
+        int n = nums.length;
+        int mod = 1000000007;
+
+        long prefix[] = new long[n+1];      
+        for(int i=1; i<=n; i++){
+            prefix[i]=prefix[i-1]+nums[i-1];
+        }
+
+        long ans = Long.MIN_VALUE;
+
+        int left[] = new int[n];
+        left[0] = -1;
+
+        int right[] = new int[n];
+        right[n-1]=n;
+
+        
+        Stack<Integer> leftS = new Stack<>();
+        leftS.push(0);
+
+        for(int i=1; i<n; i++){
+            while(!leftS.isEmpty() && nums[leftS.peek()]>=nums[i]){
+                leftS.pop();
+            }
+            left[i]=(!leftS.isEmpty())?leftS.peek():-1;
+            leftS.push(i);
+        }
+
+        Stack<Integer> rightS = new Stack<>();
+        rightS.push(n-1);
+        
+        for(int i=n-2; i>=0; i--){
+            while(!rightS.isEmpty() && nums[rightS.peek()]>=nums[i]){
+                rightS.pop();
+            }
+            right[i]=(!rightS.isEmpty())?rightS.peek():n;
+            rightS.push(i);
+        }
+
+        for(int i=0; i<n; i++){
+            int leftIdx=left[i];
+            int rightIdx=right[i];
+            long curAns = prefix[rightIdx]-prefix[leftIdx+1];
+            curAns*=nums[i];
+            ans = Math.max(ans,curAns);
+        }
+
+        return (int)(ans%mod);
+    }
+}
