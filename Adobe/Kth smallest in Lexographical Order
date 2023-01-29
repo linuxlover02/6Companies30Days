@@ -1,0 +1,40 @@
+class Solution {
+    public int findKthNumber(int n, int k) {
+        return helper(0,n,k);        
+    }
+
+    int helper(long prefix, int n, int k){
+        for(int i=(prefix==0)?1:0; i<=9; i++){
+            long count = counter(prefix*10+i,n);
+            System.out.println(prefix);
+            if(k==0) return (int)prefix;
+            if(count>=k){
+                return (int)helper(prefix*10+i,n,k-1);
+            }else{
+                k-=count;
+            }
+        }
+        return (int)prefix;
+    }
+
+    long counter(long prefix, int n){
+        if(prefix>n) return 0;
+        else if(prefix==n) return 1;
+        
+        long count=1;
+        long minPrefix = prefix; long maxPrefix=prefix;
+        while(true){
+            minPrefix=minPrefix*10; maxPrefix=maxPrefix*10+9;
+            if(minPrefix>n) break;
+            else if(minPrefix<=n && n<=maxPrefix){
+                count+=(n-minPrefix+1);
+                break;                
+            }else{
+                count+=(maxPrefix-minPrefix+1);
+            }
+        }
+        return count;
+    }
+}
+
+
