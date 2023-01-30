@@ -1,0 +1,30 @@
+class Solution {
+
+    double radius; double xCenter; double yCenter;
+
+    public Solution(double radius, double x_center, double y_center) {
+        this.radius=radius; xCenter=x_center; yCenter=y_center;        
+    }
+    
+    public double[] randPoint() {
+        double lowX=xCenter-radius;
+        double lowY=yCenter-radius;
+
+        double highX=xCenter+radius;
+        double highY=yCenter+radius;
+
+        Random rand = new Random();
+        while(true){
+            double x = rand.nextDouble(highX-lowX)+lowX;
+            double y = rand.nextDouble(highY-lowY)+lowY;
+            if(isValid(x,y,xCenter,yCenter,radius)) return new double[]{x,y};
+        }
+    }
+
+    boolean isValid(double x, double y, double xCenter, double yCenter, double radius){
+        double xSquare = Math.pow((x-xCenter),2);
+        double ySquare = Math.pow((y-yCenter),2);
+        double length = Math.sqrt(xSquare+ySquare);
+        return length<=radius;
+    }
+}
