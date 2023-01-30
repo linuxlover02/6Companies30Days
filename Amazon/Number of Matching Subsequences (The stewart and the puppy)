@@ -1,0 +1,33 @@
+class Solution {
+    public int numMatchingSubseq(String s, String[] words) {
+        HashMap<Character,TreeSet<Integer>> map = new HashMap<>();
+        for(int i=0; i<s.length(); i++){
+            map.putIfAbsent(s.charAt(i),new TreeSet<>());
+            map.get(s.charAt(i)).add(i);
+        }   
+
+        int ans=0;
+
+        for(String word: words){
+            if(map.containsKey(word.charAt(0))){
+                int prevIdx=map.get(word.charAt(0)).higher(-1);
+                int i=1;
+                for(; i<word.length(); i++){
+                    char c=word.charAt(i);
+                    if(map.containsKey(c)){
+                        if(map.get(c).higher(prevIdx)!=null){
+                            prevIdx=map.get(c).higher(prevIdx);
+                        }else{
+                            break;
+                        }
+                    }else{
+                        break;
+                    }
+                }
+                if(i==word.length()) ans++;
+            }            
+        }
+
+        return ans;     
+    }
+}
