@@ -1,0 +1,9 @@
+class Solution {
+    public int getLastMoment(int n, int[] left, int[] right) {
+        Arrays.sort(left);
+        Arrays.sort(right);
+        int ans = (left.length!=0)?left[left.length-1]:0;
+        ans = (right.length!=0)?Math.max(ans,n-right[0]):ans;
+        return ans;        
+    }
+}
